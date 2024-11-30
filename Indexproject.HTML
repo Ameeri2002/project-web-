@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+
+    .container {
+      width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #cccccc;
+      background-color: #ffffff;
+    }
+
+    .question {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .option {
+      margin-bottom: 10px;
+    }
+
+    .option input {
+      margin-right: 10px;
+    }
+
+    .button {
+      display: block;
+      width: 100px;
+      margin: 20px auto;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #0099ff;
+      color: #ffffff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #0066cc;
+    }
+
+    .result {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333333;
+      text-align: center;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>World Quiz</h1>
+  <div class="container">
+    <div class="question">Which is the largest country in the world by area?</div>
+    <ul class="options">
+      <li class="option"><input type="radio" name="q1" value="A">A. Russia</li>
+      <li class="option"><input type="radio" name="q1" value="B">B. Canada</li>
+      <li class="option"><input type="radio" name="q1" value="C">C. China</li>
+      <li class="option"><input type="radio" name="q1" value="D">D. USA</li>
+    </ul>
+    <button class="button" onclick="checkAnswer(1, 'A')">Next</button>
+    <div class="result"></div>
+  </div>
+  <script>
+    // Questions and answers.
+    var questions = [
+      {
+        question: "Which is the largest country in the world by area?",
+        options: ["A. Russia", "B. Canada", "C. China", "D. USA"],
+        answer: "A"
+      },
+      {
+        question: "Which is the most populous country in the world?",
+        options: ["A. India", "B. China", "C. USA", "D. Indonesia"],
+        answer: "B"
+      },
+      {
+        question: "Which is the smallest country in the world by area?",
+        options: ["A. Vatican City", "B. Monaco", "C. Nauru", "D. San Marino"],
+        answer: "A"
+      },
+      {
+        question: "Which is the only country in the world that covers an entire continent?",
+        options: ["A. Australia", "B. Antarctica", "C. Brazil", "D. Egypt"],
+        answer: "A"
+      },
+      {
+        question: "Which is the only country in the world that has a flag with more than four sides?",
+        options: ["A. Nepal", "B. Switzerland", "C. Vatican City", "D. Malaysia"],
+        answer: "A"
+      },
+      {
+        question: "Which is the only country in the world that has no land borders?",
+        options: ["A. Iceland", "B. Australia", "C. Sri Lanka", "D. Madagascar"],
+        answer: "B"
+      },
+      {
+        question: "Which is the only country in the world that has a capital city that starts with the letter Q?",
+        options: ["A. Qatar", "B. Ecuador", "C. Iraq", "D. Equatorial Guinea"],
+        answer: "B"
+      },
+      {
+        question: "Which is the only country in the world that has a name that ends with the letter X?",
+        options: ["A. Luxembourg", "B. Mexico", "C. Laos", "D. France"],
+        answer: "D"
+      },
+      {
+        question: "Which is the only country in the world that has a name that starts and ends with the same letter?",
+        options: ["A. Angola", "B. Cuba", "C. Oman", "D. Uganda"],
+        answer: "C"
+      },
+      {
+        question: "Which is the only country in the world that has a name that contains all five vowels?",
+        options: ["A. Mozambique", "B. Mauritania", "C. Guinea-Bissau", "D. Seychelles"],
+        answer: "A"
+      }
+    ];
+
+    
+    var currentQuestion = 0;
+
+    var correctAnswers = 0;
+
+    var incorrectAnswers = 0;
+
+    function checkAnswer(question, answer) {
+
+      var userAnswer = document.querySelector("input[name=q" + question + "]:checked").value;
+
+      var result = document.querySelector(".result");
+
+      if (userAnswer == answer) {
+
+        correctAnswers++;
+        result.innerHTML = "Correct! You have " + correctAnswers + " correct answer(s) and " + incorrectAnswers + " incorrect answer(s).";
+        result.classList.add("correct");
+        result.classList.remove("incorrect");
+      } else {
+        // If the answer is incorrect, increment the incorrect answers and display a message
+        incorrectAnswers++;
+        result.innerHTML = "Incorrect! The correct answer is " + answer + ". You have " + correctAnswers + " correct answer(s) and " + incorrectAnswers + " incorrect answer(s).";
+        result.classList.add("incorrect");
+        result.classList.remove("correct");
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        // If yes, display the next question and options
+        displayQuestion(currentQuestion);
+      } else {
+
+        result.innerHTML = "You have completed the quiz. You have " + correctAnswers + " correct answer(s) and " + incorrectAnswers + " incorrect answer(s).";
+        document.querySelector(".button").disabled = true;
+      }
+    }
+
+    function displayQuestion(question) {
+
+      var questionElement = document.querySelector(".question");
+
+      var optionsElement = document.querySelector(".options");
+
+      questionElement.innerHTML = questions[question].question;
+
+      optionsElement.innerHTML = "";
+
+      for (var i = 0; i < questions[question].options.length; i++) {
+
+        var option = document.createElement("li");
+        option.className = "option";
+
+        var input = document.createElement("input");
+        input.type = "radio";
+        input.name = "q" + (question + 1);
+        input.value = questions[question].options[i][0];
+
+        var text = document.createTextNode(questions[question].options[i]);
+
+        option.appendChild(input);
+        option.appendChild(text);
+
+        optionsElement.appendChild(option);
+      }
+
+      // Set the button onclick attribute to check the answer
+      document.querySelector(".button").setAttribute("onclick", "checkAnswer(" + (question + 1) + ", '" + questions[question].answer + "')");
+    }
+
+    displayQuestion(currentQuestion);
+  </script>
+</body>
+</html>
